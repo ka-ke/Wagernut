@@ -13,24 +13,52 @@ import java.util.*;
  */
 public class Employee {
 
-    private int id;
     private String name;
-    private Map<Date, Double> salaries;
+    private int id;
+    private ArrayList<Wage> wages;
 
-    public Employee(String name) {
+    public Employee(String name, int id) {
         this.name = name;
-        salaries = new HashMap();
+        this.id = id;
+        wages = new ArrayList();
     }
 
-    public void newSalary(Date date, double salary) {
-        salaries.put(date, salary);
+    public void newWage(Wage wage) {
+        wages.add(wage);
     }
 
-    public double getSalary(int month) {
-        return 0;
+    public Wage getWageByDate(Date date){
+        for(Wage wage : wages){
+            if(wage.getDate().equals(date)){
+                return wage;
+            }
+        }
+        return null;
     }
 
-    public double getSalary(Date date) {
-        return 0;
+    public double getTotalWage() {
+        double totalWage = 0;
+        for (Wage wage : wages) {
+            totalWage += wage.getTotal();
+        }
+        return totalWage;
+    }
+
+    public List getWages() {
+        return wages;
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
     }
 }

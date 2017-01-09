@@ -16,7 +16,6 @@ public class Workshift {
     private int employeeId;
     private Date start;
     private Date end;
-    private Wage wage;
 
     public Workshift(int id, Date start, Date end) {
         employeeId = id;
@@ -30,6 +29,10 @@ public class Workshift {
 
     public Date getEnd() {
         return end;
+    }
+
+    public int getEmployeeId() {
+        return employeeId;
     }
 
     public double getWorkTime() {
@@ -46,7 +49,7 @@ public class Workshift {
         return workTime;
     }
 
-    public double getEveningWork() {
+    public double getEveningWorkTime() {
         double workTime = 0;
         int startingHour = start.getHours();
         int endingHour = end.getHours();
@@ -60,7 +63,7 @@ public class Workshift {
                 workTime += 6 - startingHour - startingMin / 60;
 
                 if (endingHour < 6) {
-                    workTime -= 6 - endingHour ;
+                    workTime -= 6 - endingHour;
                 }
             }
             // evening hours between 18-24 o'clock
@@ -97,17 +100,5 @@ public class Workshift {
         }
 
         return workTime;
-    }
-
-    public int getEmployeeId() {
-        return employeeId;
-    }
-
-    public void setWage(Wage wage) {
-        this.wage = wage;
-    }
-
-    public Wage getWage() {
-        return wage;
     }
 }

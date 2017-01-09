@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Wagernut</title>
+        <meta charset="UTF-8" />
+    </head>
+    <body>
+        <div th:include="fragments/essentials :: essentials"></div>
+        <!--        <div th:include="fragments/debug :: debug"></div>-->
+        <div>
+            <p><strong>Employees</strong></p>
+
+            <ol>
+                <li th:each="employee : ${employees}">
+                    <a th:text="${employee.name}">the employee</a>
+                    <form th:action="@{/{id}/wage(id=${employee.id})}" method="POST">
+                        <input type="submit" value="Show wages"/>
+                    </form>
+                    <form th:action="@{/{id}/breakdown(id=${employee.id})}" method="POST">
+                        <input type="submit" value="Show wages with breakdown"/>
+                    </form>
+                </li>
+            </ol>
+
+            <p>Wages for <a th:text="${employeeName}"><strong>employee</strong></a></p>
+
+            <ul>
+                <li th:each="wage : ${wages}">
+                    <p>
+                        <a th:text="${wage.total}"/>
+                        <a> on </a>
+                        <a th:text="${wage.date}">date</a>
+                    </p>
+                </li>
+            </ul>
+
+            <ul>
+                <li th:each="wage : ${breakdown}">
+                    <p><a th:text="${wage.regular}"/><a> of regular wage</a></p>
+                    <p><a th:text="${wage.evening}"/><a> of evening compensation</a></p>
+                    <p><a th:text="${wage.overtime}"/><a> of overtime compensation</a></p>
+                    <p><a th:text="${wage.total}"/><a> in total</a></p>
+                    <p><a>on </a><a th:text="${wage.date}"/>date</p>
+                </li>
+            </ul>
+
+        </div>
+    </body>
+</html>

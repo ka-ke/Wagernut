@@ -9,6 +9,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import wagernut.domain.Employee;
 import wagernut.domain.Workshift;
 
 /**
@@ -22,9 +23,14 @@ public class DataHandler {
 
     public DataHandler() {
         shiftlist = new ArrayList<Workshift>();
-        employees = new HashMap<Integer, String>();
+        employees = new HashMap<Integer, Employee>();
     }
 
+    /**
+     * Uses the datalines to create workshift and employee objects
+     *
+     * @param data A dataline to be handled
+     */
     public void handleData(String data) {
         Scanner scanner = new Scanner(data);
         scanner.useDelimiter(",");
@@ -35,8 +41,8 @@ public class DataHandler {
             String date = scanner.next();
             String start = date + " " + scanner.next();
             String end = date + " " + scanner.next();
-            
-            if(idString.equals("Person ID")){
+
+            if (idString.equals("Person ID")) {
                 continue;
             }
 
@@ -44,12 +50,12 @@ public class DataHandler {
             Date startDate = handleDate(start);
             Date endDate = handleDate(end);
 
-            if(employeeId==-1 || startDate==null || endDate==null){
+            if (employeeId == -1 || startDate == null || endDate == null) {
                 continue;
             }
-            
+
             if (!employees.containsKey(employeeId)) {
-                employees.put(employeeId, employeeName);
+                employees.put(employeeId, new Employee(employeeName, employeeId));
             }
             Workshift newShift = new Workshift(employeeId, startDate, endDate);
 
@@ -57,9 +63,15 @@ public class DataHandler {
         }
     }
 
+    /**
+     * Handles the integer part of the data
+     *
+     * @param idString Integer data as a string
+     * @return Employee ID as integer
+     */
     private int handleInt(String idString) {
         int employeeId = -1;
-        
+
         try {
             employeeId = Integer.parseInt(idString);
         } catch (Exception ex) {
@@ -69,8 +81,14 @@ public class DataHandler {
         return employeeId;
     }
 
+    /**
+     * Handles the date part of the data
+     *
+     * @param dateString Date data as a string
+     * @return Date information pertaining the data
+     */
     public Date handleDate(String dateString) {
-        DateFormat format = new SimpleDateFormat("dd.MM.yyyy kk:mm", Locale.ENGLISH);
+        DateFormat format = new SimpleDateFormat("dd.MM.yyyy kk:mm");
         Date date = null;
 
         try {

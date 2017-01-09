@@ -1,0 +1,9 @@
+wagernut/controllers/WageController.class
+wagernut/services/ShiftService.class
+wagernut/domain/Wage.class
+wagernut/domain/Workshift.class
+wagernut/controllers/WagernutController.class
+wagernut/domain/Employee.class
+wagernut/Main.class
+wagernut/services/WageService.class
+wagernut/services/DataHandler.class

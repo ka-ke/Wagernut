@@ -14,31 +14,59 @@ import java.util.*;
  * @author Kake
  */
 public class ShiftService {
-    
-    Scanner scanner;
+
+    ArrayList<File> files;
     DataHandler handler = new DataHandler();
-    
-    public ShiftService(String filename) {
+
+    public ShiftService() {
+        files = new ArrayList();
+    }
+
+    /**
+     * Adds a new datafile to the list of workshifts
+     *
+     * @param filename Name of the file to be added
+     */
+    public void addShiftFile(String filename) {
         try {
-            scanner = new Scanner(new File(filename));
-        } catch (FileNotFoundException ex) {
+            File file = new File(filename);
+            files.add(file);
+        } catch (Exception ex) {
             System.out.println("File not found");
         }
     }
-    
-    public void parseData(){
 
-        while(scanner.hasNextLine()){
-            String dataLine = scanner.nextLine();
-            handler.handleData(dataLine);
+    /**
+     * Parses the datafiles into datalines to be handled by Datahandler
+     */
+    public void parseData() {
+
+        for (File file : files) {
+            Scanner scanner;
+            try {
+                scanner = new Scanner(file);
+
+                while (scanner.hasNextLine()) {
+                    String dataLine = scanner.nextLine();
+                    handler.handleData(dataLine);
+                }
+            } catch (FileNotFoundException ex) {
+                System.out.println("No good files to parse");
+            }
         }
     }
-        
-    public ArrayList getShiftlist(){
+
+    /**
+     * @return The list with all workshifts
+     */
+    public ArrayList getShiftlist() {
         return handler.shiftlist;
     }
-    
-    public HashMap getEmployees(){
+
+    /**
+     * @return The map with all employees
+     */
+    public HashMap getEmployees() {
         return handler.employees;
     }
 }

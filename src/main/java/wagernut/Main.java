@@ -5,27 +5,17 @@
  */
 package wagernut;
 
-import java.util.*;
-import wagernut.domain.Workshift;
-import wagernut.services.ShiftService;
-import wagernut.services.WageService;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  *
  * @author Kake
  */
+@SpringBootApplication
 public class Main {
+
     public static void main(String[] args) {
-        
-        ShiftService shiftService = new ShiftService("files/HourList201403.csv");
-        shiftService.parseData();
-        ArrayList<Workshift> shiftlist = shiftService.getShiftlist();
-        HashMap<Integer, String> employees = shiftService.getEmployees();
-        
-        WageService wageService = new WageService(shiftlist);
-        double wage = wageService.countWageForEmployee(3);
-        System.out.println(employees.get(3)+" palkka: "+wage);
-        
-        System.out.println("closing");
+        SpringApplication.run(Main.class, args);
     }
 }
