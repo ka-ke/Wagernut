@@ -62,7 +62,7 @@ public class DefaultController {
     }
 
     @RequestMapping(value = "/{id}/wagelist", method = RequestMethod.POST)
-    public String wage(Model model, @PathVariable String id) {
+    public String wagelist(Model model, @PathVariable String id) {
         // Set the employeeId to see the wages of corresponding employee
         employeeId = Integer.parseInt(id);
         wageFormat = "wagelist";
@@ -75,6 +75,15 @@ public class DefaultController {
         // Set the employeeId to see the wagebreakdown of corresponding employee
         employeeId = Integer.parseInt(id);
         wageFormat = "breakdown";
+
+        return "redirect:/";
+    }
+    
+    @RequestMapping(value = "/hide", method = RequestMethod.POST)
+    public String hideWages(Model model) {
+        // Set the parameters to hide all wage information
+        employeeId = 0;
+        wageFormat = "";
 
         return "redirect:/";
     }

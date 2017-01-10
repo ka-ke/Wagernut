@@ -13,6 +13,10 @@
                 <input type="submit" value="Count wages"/>
             </form>
 
+            <form th:if="${employeeId}" th:action="@{/hide}" method="POST">
+                <input type="submit" value="Hide wages"/>
+            </form>
+
             <p><strong>Employees</strong></p>
 
             <ol>
@@ -27,33 +31,33 @@
                 </li>
             </ol>
 
-            <div th:if="${not #lists.isEmpty(wages)}">
+            <div th:if="${employeeId}">
                 <p>Wages for <a th:text="${employee.name}"></a></p>
                 <p><a>Total wage this month is </a><a th:text="${total}"/></p>
+
+                <div th:switch="${wageFormat}">
+                    <ul th:case="wagelist">                
+                        <li th:each="wage : ${wages}">
+                            <p>
+                                <a th:text="${wage.total}"/>
+                                <a> on </a>
+                                <a th:text="${wage.date}"/>
+                            </p>
+                        </li>
+                    </ul>
+
+                    <ul th:case="breakdown">
+                        <li th:each="wage : ${wages}">
+                            <p><a th:text="${wage.regular}"/><a> of regular wage</a></p>
+                            <p th:if="${wage.evening}"><a th:text="${wage.evening}"/><a> of evening compensation</a></p>
+                            <p th:if="${wage.overtime}"><a th:text="${wage.overtime}"/><a> of overtime compensation</a></p>
+                            <p><a th:text="${wage.total}"/><a> in total</a></p>
+                            <p><a>on </a><a th:text="${wage.date}"/></p>
+                        </li>
+                    </ul>
+                </div>
+                
             </div>
-
-            <div th:switch="${wageFormat}">
-                <ul th:case="wagelist">                
-                    <li th:each="wage : ${wages}">
-                        <p>
-                            <a th:text="${wage.total}"/>
-                            <a> on </a>
-                            <a th:text="${wage.date}"/>
-                        </p>
-                    </li>
-                </ul>
-
-                <ul th:case="breakdown">
-                    <li th:each="wage : ${wages}">
-                        <p><a th:text="${wage.regular}"/><a> of regular wage</a></p>
-                        <p th:if="${wage.evening}"><a th:text="${wage.evening}"/><a> of evening compensation</a></p>
-                        <p th:if="${wage.overtime}"><a th:text="${wage.overtime}"/><a> of overtime compensation</a></p>
-                        <p><a th:text="${wage.total}"/><a> in total</a></p>
-                        <p><a>on </a><a th:text="${wage.date}"/></p>
-                    </li>
-                </ul>
-            </div>
-
         </div>
     </body>
 </html>
