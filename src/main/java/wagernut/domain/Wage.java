@@ -19,6 +19,9 @@ public class Wage {
     private double total;
     private Date date;
 
+    /**
+     * @param date Starting date of the interval from which the payment is from. Used in templates.
+     */
     public Wage(Date date) {
         regular = 0;
         evening = 0;
@@ -36,6 +39,7 @@ public class Wage {
 
     /**
      * Sets the regular and adjusts the total wage
+     *
      * @param regular the regular to set
      */
     public void setRegular(double regular) {
@@ -52,6 +56,7 @@ public class Wage {
 
     /**
      * Sets the evening and adjusts the total wage
+     *
      * @param evening the evening to set
      */
     public void setEvening(double evening) {
@@ -68,6 +73,7 @@ public class Wage {
 
     /**
      * Sets the overtime and adjusts the total wage
+     *
      * @param overtime the overtime to set
      */
     public void setOvertime(double overtime) {

@@ -14,9 +14,18 @@ import wagernut.domain.*;
  */
 public class WageService {
 
-    ArrayList<Workshift> shiftlist;
+    private ArrayList<Workshift> shiftlist;
     private HashMap<Integer, Employee> employees;
+    private double regularWage = 3.75;
+    private double overtimeCompensation8 = 0.25;
+    private double overtimeCompensation10 = 0.5;
+    private double overtimeCompensation12 = 1;
+    private double eveningCompensation = 1.15;
 
+    /**
+     * @param shiftlist The list of workshifts to count the wages from
+     * @param employees Employees that have worked
+     */
     public WageService(ArrayList shiftlist, HashMap employees) {
         this.shiftlist = shiftlist;
         this.employees = employees;
@@ -41,7 +50,7 @@ public class WageService {
     public void countWageForShift(Workshift shift) {
 
         Employee employee = getEmployees().get(shift.getEmployeeId());
-        
+
         // If wage for that exact date and time already exists, we don't add it again
         if (employee.getWageByDate(shift.getStart()) != null) {
             return;
@@ -50,7 +59,7 @@ public class WageService {
         Wage wage = new Wage(shift.getStart());
         double workTime = shift.getWorkTime();
 
-        wage.setRegular(workTime * 3.75);
+        wage.setRegular(workTime * regularWage);
 
         if (workTime > 8) {
             wage.setOvertime(countOvertimeCompensation(workTime));
@@ -70,7 +79,7 @@ public class WageService {
      */
     public double countEveningCompensation(double workTime) {
 
-        return workTime * 1.15;
+        return workTime * eveningCompensation;
     }
 
     /**
@@ -83,20 +92,20 @@ public class WageService {
         double overTimeWage = 0;
 
         if (workTime > 12) {
-            overTimeWage += (workTime - 12) * 3.75;
+            overTimeWage += (workTime - 12) * overtimeCompensation12;
             workTime = 12;
         }
         if (workTime > 10) {
-            overTimeWage += (workTime - 10) * 3.75 * 0.5;
+            overTimeWage += (workTime - 10) * 3.75 * overtimeCompensation10;
             workTime = 10;
         }
-        overTimeWage += (workTime - 8) * 3.75 * 0.25;
+        overTimeWage += (workTime - 8) * 3.75 * overtimeCompensation8;
 
         return overTimeWage;
     }
 
     /**
-     * @return the employees
+     * @return Employees with updated wagelists
      */
     public HashMap<Integer, Employee> getEmployees() {
         return employees;

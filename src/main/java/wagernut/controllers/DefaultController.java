@@ -11,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import wagernut.domain.*;
 import wagernut.services.*;
 
@@ -20,67 +19,62 @@ public class DefaultController {
 
     ShiftService shiftService = new ShiftService();
     WageService wageService;
-    HashMap<Integer, Employee> employees;
-    ArrayList<Workshift> shiftlist;
+    HashMap<Integer, Employee> employees = new HashMap();
     Collection wages;
-    boolean breakdown = false;
-    int employeeId = -1;
-    String employeeName = "";
+    String wageFormat = "";
+    int employeeId = 0;
 
     @RequestMapping("/")
     public String view(Model model
     ) {
-        // Add a file to be parsed and handled into a workshift and employee sets
-        shiftService.addShiftFile("files/HourList201403.csv");
-        shiftService.parseData();
-
-        shiftlist = shiftService.getShiftlist();
-        employees = shiftService.getEmployees();
-
-        // Add employee list if there are employees and a wage list if requested
+        // Add some necessary modelattributes
+        model.addAttribute("employeeId", employeeId);
+        model.addAttribute("wageFormat", wageFormat);
+        // Add employee list if there are employees
         if (!employees.isEmpty()) {
             model.addAttribute("employees", employees.values());
         }
+        // Add wages of the requested employee
         if (employeeId > 0) {
-            wages = employees.get(employeeId).getWages();
-            employeeName = employees.get(employeeId).getName();
-            model.addAttribute("employeeName", employeeName);
-            
-            // Use the breakdown in model if requested
-            if (breakdown) {
-                model.addAttribute("breakdown", wages);
-            } else {
-                model.addAttribute("wages", wages);
-            }
+            Employee employee = employees.get(employeeId);
+            wages = employee.getWages();
+            model.addAttribute("employee", employee);
+            model.addAttribute("total", employee.getTotalWage());
+            model.addAttribute("wages", wages);
         }
-
         return "index";
     }
 
-    @RequestMapping(value = "/{id}/wage", method = RequestMethod.POST)
-    public String wage(Model model, @PathVariable String id) {
-        employeeId = Integer.parseInt(id);
+    @RequestMapping(value = "/count", method = RequestMethod.POST)
+    public String countWages() {
+        // Add a file to be parsed and handled into a workshift and employee sets
+        shiftService.addShiftFile("files/HourList201403.csv");
+        shiftService.parseData();
+        ArrayList<Workshift> shiftlist = shiftService.getShiftlist();
+        employees = shiftService.getEmployees();
 
         // Count wage for employees
         wageService = new WageService(shiftlist, employees);
         wageService.countWages();
         employees = wageService.getEmployees();
 
-        breakdown = false;
+        return "redirect:/";
+    }
+
+    @RequestMapping(value = "/{id}/wagelist", method = RequestMethod.POST)
+    public String wage(Model model, @PathVariable String id) {
+        // Set the employeeId to see the wages of corresponding employee
+        employeeId = Integer.parseInt(id);
+        wageFormat = "wagelist";
 
         return "redirect:/";
     }
 
     @RequestMapping(value = "/{id}/breakdown", method = RequestMethod.POST)
     public String breakdown(Model model, @PathVariable String id) {
+        // Set the employeeId to see the wagebreakdown of corresponding employee
         employeeId = Integer.parseInt(id);
-
-        // Count wage for employees
-        wageService = new WageService(shiftlist, employees);
-        wageService.countWages();
-        employees = wageService.getEmployees();
-
-        breakdown = true;
+        wageFormat = "breakdown";
 
         return "redirect:/";
     }

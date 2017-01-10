@@ -17,6 +17,11 @@ public class Workshift {
     private Date start;
     private Date end;
 
+    /**
+     * @param id Id of the employee
+     * @param start Starting date of the workshift
+     * @param end End date of the workshift
+     */
     public Workshift(int id, Date start, Date end) {
         employeeId = id;
         this.start = start;
@@ -35,6 +40,9 @@ public class Workshift {
         return employeeId;
     }
 
+    /**
+     * @return Duration of the workshift in hours
+     */
     public double getWorkTime() {
         // workshift that doesn't last overnight
         int workHours = end.getHours() - start.getHours();
@@ -49,6 +57,9 @@ public class Workshift {
         return workTime;
     }
 
+    /**
+     * @return Worktime that took place during evening hours
+     */
     public double getEveningWorkTime() {
         double workTime = 0;
         int startingHour = start.getHours();

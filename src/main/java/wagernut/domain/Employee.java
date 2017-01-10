@@ -17,25 +17,38 @@ public class Employee {
     private int id;
     private ArrayList<Wage> wages;
 
+    /**
+     * @param id Id of the employee
+     * @param name Name of the employee
+     */
     public Employee(String name, int id) {
         this.name = name;
         this.id = id;
         wages = new ArrayList();
     }
 
+    /**
+     * Adds a new wage to the wagelist
+     */
     public void newWage(Wage wage) {
         wages.add(wage);
     }
 
-    public Wage getWageByDate(Date date){
-        for(Wage wage : wages){
-            if(wage.getDate().equals(date)){
+    /**
+     * @return Wage at a specific date, null if doesn't exist
+     */
+    public Wage getWageByDate(Date date) {
+        for (Wage wage : wages) {
+            if (wage.getDate().equals(date)) {
                 return wage;
             }
         }
         return null;
     }
 
+    /**
+     * @return The total wage earned by the employee in double
+     */
     public double getTotalWage() {
         double totalWage = 0;
         for (Wage wage : wages) {

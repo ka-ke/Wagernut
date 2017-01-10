@@ -28,7 +28,6 @@ public class DataHandler {
 
     /**
      * Uses the datalines to create workshift and employee objects
-     *
      * @param data A dataline to be handled
      */
     public void handleData(String data) {
